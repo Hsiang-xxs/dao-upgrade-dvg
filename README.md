@@ -17,8 +17,10 @@ npx hardhat deploy --network <network> --tags <network>_UpgradeDVG_verify
 
 ```
 
-## Add items to the whitelist
+## Generate signatures for the allowed users
+
+Update scripts/whitelist.js with the correct holder's information.
 
 ```
-npx hardhat run --network <network> scripts/addWhiteList.js
+npx hardhat run scripts/createSignature.js
 ```

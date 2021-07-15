@@ -19,7 +19,6 @@
     "bignumber.js": "^9.0.1",
     "chai": "^4.3.0",
     "dotenv": "^10.0.0",
-    "eth-sig-util": "^3.0.1",
     "ethereum-waffle": "^3.3.0",
     "ethers": "^5.0.31",
     "hardhat": "^2.0.11",

@@ -16,7 +16,7 @@ async function main() {
             ["address", "uint256"],
             [user, allowedAmount]
         );
-        const signature = await signerWallet.signMessage(message);
+        const signature = await signerWallet.signMessage(ethers.utils.arrayify(message));
         console.log(`${user}: ${signature}`);
     }
 }

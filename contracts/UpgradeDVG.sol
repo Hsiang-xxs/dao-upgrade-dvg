@@ -98,10 +98,11 @@ contract UpgradeDVG is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     function isValidSignature(address _user, uint256 _allowedAmount, bytes memory _signature) internal view returns (bool) {
-        bytes32 message = ECDSA.toEthSignedMessageHash(keccak256(abi.encodePacked(_user, _allowedAmount)));
+        bytes32 message = keccak256(abi.encodePacked(_user, _allowedAmount));
+        bytes32 messageHash = ECDSA.toEthSignedMessageHash(message);
 
         // check that the signature is from admin signer.
-        address recoveredAddress = ECDSA.recover(message, _signature);
+        address recoveredAddress = ECDSA.recover(messageHash, _signature);
         return (recoveredAddress == signer) ? true : false;
     }
 }
