@@ -2,6 +2,7 @@ module.exports = {
   mainnet: {
     Global: {
       proxyAdmin: "0xeFd9928Aa5A192C0267CdAed43235006B7A28628",  // TODO: Update with the correct address
+      signerAddress: "0xeFd9928Aa5A192C0267CdAed43235006B7A28628",  // TODO: Update with the correct address
     },
     DVG: {
       tokenAddress: "0x51e00a95748DBd2a3F47bC5c3b3E7B3F0fea666c",
@@ -14,6 +15,7 @@ module.exports = {
   kovan: {
     Global: {
       proxyAdmin: "0xeFd9928Aa5A192C0267CdAed43235006B7A28628",  // TODO: Update with the correct address
+      signerAddress: "0xeFd9928Aa5A192C0267CdAed43235006B7A28628",  // TODO: Update with the correct address
     },
     DVG: {
       tokenAddress: "0xea9726eFc9831EF0499fD4Db4Ab143F15a797673",

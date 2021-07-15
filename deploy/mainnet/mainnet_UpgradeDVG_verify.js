@@ -17,6 +17,7 @@ module.exports = async ({ deployments }) => {
       network_.DVG.tokenAddress,
       network_.DVD.tokenAddress,
       network_.DVD.vaultAddress,
+      network_.Global.signerAddress,
   ]);
 
   const proxy = await ethers.getContract("UpgradeDVGProxy");
