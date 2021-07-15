@@ -105,4 +105,6 @@ contract UpgradeDVG is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         address recoveredAddress = ECDSA.recover(messageHash, _signature);
         return (recoveredAddress == signer) ? true : false;
     }
+
+    uint256[44] private __gap;
 }
