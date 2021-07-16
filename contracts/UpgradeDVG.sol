@@ -2,19 +2,20 @@
 pragma solidity 0.7.6;
 pragma abicoder v2;
 
-import "@openzeppelin/contracts/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/cryptography/ECDSAUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 
-contract UpgradeDVG is OwnableUpgradeable, ReentrancyGuardUpgradeable {
-    using SafeMath for uint256;
-    using SafeERC20 for IERC20;
 
-    IERC20 public dvg;
-    IERC20 public dvd;
+contract UpgradeDVG is OwnableUpgradeable, ReentrancyGuardUpgradeable {
+    using SafeMathUpgradeable for uint256;
+    using SafeERC20Upgradeable for IERC20Upgradeable;
+
+    IERC20Upgradeable public dvg;
+    IERC20Upgradeable public dvd;
     address public vault;
     address public signer;
 
@@ -34,14 +35,10 @@ contract UpgradeDVG is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         __Ownable_init();
         __ReentrancyGuard_init();
 
-        dvg = IERC20(_dvg);
-        dvd = IERC20(_dvd);
+        dvg = IERC20Upgradeable(_dvg);
+        dvd = IERC20Upgradeable(_dvd);
         vault = _vault;
         signer = _signer;
-    }
-
-    receive() external payable {
-        require(false, "We do not accept the ETH");
     }
 
     /**
@@ -70,24 +67,25 @@ contract UpgradeDVG is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     /**
-     * @notice Airdrop the DVD tokens to the specified addresses.
+     * @notice Airdrop the DVD tokens to the specified addresses. The count is limited as 30 to avoid spending much gas and to avoid exceed block gas limit.
      * @param _addresses Addresses to airdrop DVD token
      * @param _allowedAmounts Amounts allowed to be upgraded
      * @param _signatures signatures to proof both the senders and the allowed amounts
      */
     function airdropDVD(address[] memory _addresses, uint256[] memory _allowedAmounts, bytes[] memory _signatures) external onlyOwner {
         require(0 < _addresses.length, "No address input");
+        require(_addresses.length <= 30, "Exceeded limit");
         require(_addresses.length == _allowedAmounts.length, "Mismatch the parameters");
         require(_addresses.length == _signatures.length, "Mismatch the parameters");
 
         for (uint i = 0; i < _addresses.length; i ++) {
             address user = _addresses[i];
             uint256 allowedAmount = _allowedAmounts[i];
-            bytes memory signature = _signatures[i];
-            require(isValidSignature(user, allowedAmount, signature), "The specified amount is not allowed for the user");
-
             uint256 pending = allowedAmount.sub(swappedAmounts[user]);
             if (0 < pending) {
+                bytes memory signature = _signatures[i];
+                require(isValidSignature(user, allowedAmount, signature), "The specified amount is not allowed for the user");
+
                 swappedAmounts[user] = swappedAmounts[user].add(pending);
                 totalSwapped = totalSwapped.add(pending);
 
@@ -99,10 +97,10 @@ contract UpgradeDVG is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     function isValidSignature(address _user, uint256 _allowedAmount, bytes memory _signature) internal view returns (bool) {
         bytes32 message = keccak256(abi.encodePacked(_user, _allowedAmount));
-        bytes32 messageHash = ECDSA.toEthSignedMessageHash(message);
+        bytes32 messageHash = ECDSAUpgradeable.toEthSignedMessageHash(message);
 
         // check that the signature is from admin signer.
-        address recoveredAddress = ECDSA.recover(messageHash, _signature);
+        address recoveredAddress = ECDSAUpgradeable.recover(messageHash, _signature);
         return (recoveredAddress == signer) ? true : false;
     }
 
