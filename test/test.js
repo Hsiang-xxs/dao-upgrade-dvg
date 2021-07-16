@@ -137,6 +137,11 @@ describe('UpgradeDVG', () => {
         [amount1, amount2],
         [signature1, signature2]
       ), "The specified amount is not allowed for the user");
+      await expectRevert(contract.connect(user1).airdropDVD(
+        [user1.address, user2.address],
+        [amount1, amount2],
+        [signature1, signature2]
+      ), "Ownable: caller is not the owner");
     });
 
     it('should works with correct amount', async () => {
