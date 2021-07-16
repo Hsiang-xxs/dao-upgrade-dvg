@@ -9,7 +9,7 @@ module.exports = {
     },
     DVD: {
       tokenAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7",  // TODO: Update after DVD deployed on Mainnet
-      vaultAddress: "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE",  // TODO: Update after DVD deployed on Mainnet
+      vaultAddress: "0x0316e3f6e0a4c01ee54e27cb1c8b2f7655d4cb62",  // TODO: Update after DVD deployed on Mainnet
     },
   },
   kovan: {

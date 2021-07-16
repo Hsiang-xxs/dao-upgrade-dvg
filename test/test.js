@@ -105,6 +105,8 @@ describe('UpgradeDVG', () => {
       expect(await dvd.balanceOf(user1.address)).to.equal(dvdBalance.add(amount1));
       expect(await contract.swappedAmounts(user1.address)).to.equal(amount1);
       expect(await contract.totalSwapped()).to.equal(amount1);
+
+      await expectRevert(contract.connect(user1).upgradeDVG(amount1, amount1, signature1), "Sender already upgraded token for the allowed amount");
     });
   });
 
@@ -158,6 +160,8 @@ describe('UpgradeDVG', () => {
       expect(await dvd.balanceOf(user2.address)).to.equal(dvdBalance2.add(amount2));
       expect(await contract.swappedAmounts(user2.address)).to.equal(amount2);
       expect(await contract.totalSwapped()).to.equal(parseInt(amount1) + parseInt(amount2));
+
+      await expectRevert(contract.connect(user1).upgradeDVG(amount1, amount1, signature1), "Sender already upgraded token for the allowed amount");
     });
   });
 
